@@ -15,7 +15,7 @@ def esi(context, view_name, *args, **kwargs):
     request     = context['request']
     url         = reverse(view_name, args=args, kwargs=kwargs)
 
-    if getattr(settings, 'USE_ESI', False):
+    if getattr(settings, 'USE_ESI', settings.DEBUG):
         url         = request.build_absolute_uri(url)
         content = '<esi:include src="{url}"/>'.format(url=url)
     else:

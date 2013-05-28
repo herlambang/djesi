@@ -11,7 +11,7 @@ not all request need this header
 class DjangoEsiMiddleware(object):
 
     def process_response(self, request, response):
-        if getattr(settings, 'USE_ESI', False):
+        if getattr(settings, 'USE_ESI', settings.DEBUG):
             if '<esi:include' in response.content:
                 response['Surrogate-Control'] = 'ESI/1.0'
         return response
