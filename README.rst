@@ -47,6 +47,23 @@ Clone djesi from https://github.com/herlambang/djesi or download the compressed 
     USE_ESI = True
 
 
+Varnish Configuration
+^^^^^^^^^^^^^^^^^^^^^
+In varnish configuration file (default.vcl) put these lines within vcl_fetch section
+
+::
+
+    sub vcl_fetch {
+
+        ### check if header contains surrogate-control to enable esi ###
+        if (beresp.http.Surrogate-Control ~ "ESI/1.0") {
+            unset beresp.http.Surrogate-Control;
+            set beresp.do_esi = true;
+        }
+
+    }
+
+Djesi initialize Surrogate-Control header, so varnish could know when it should enable ESI feature, because not all requests need this header, and not all requests is contains ESI tag. Djesi only send this header, through it's middleware, whenever a response contains ESI tag and ESI are enabled in the settings.  
 
 Usage (Sample Case)
 ^^^^^^^^^^^^^^^^^^^^^
@@ -148,7 +165,6 @@ or
 
     {% esi 'myapp.views.show_category' id=10 %}
     {% esi 'myapp.views.show_articles' year=10 month=03 %}
-
 
 
 
