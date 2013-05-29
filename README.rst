@@ -167,4 +167,51 @@ or
     {% esi 'myapp.views.show_articles' year=10 month=03 %}
 
 
+What Djesi template tag does
+""""""""""""""""""""""""""""
+As mentioned above if USE_ESI is not set, djesi template tag will take settings.DEBUG as it default value. 
 
+Why using USE_ESI instead just DEBUG settings? because sometimes you want to know whether your esi works in development environment without affecting whole django as well.
+
+The True/False USE_ESI difference.
+
+if USE_ESI == True, djesi template tag will draw esi tag.
+
+::
+
+    <html>
+    <body>
+        <!-- from ESI page -->
+        <esi:include src="http://yourhost/show_categories"/>
+        <!-- /from ESI page -->
+        <div class="content">
+            <h1>My Title Article</h1>
+            <div>....</div>
+        </div>
+    </body>
+    </html>    
+    
+
+But if USE_ESI == False, djesi template tag will append your view content into main page. For instance your esi page display category menu.
+
+::
+
+    <html>
+    <body>
+        <!-- from ESI page -->
+        <div class="menu">
+            <ul>
+              <li>Car</li>
+              <li>Bike</li>
+              <li>Plane</li>
+            </ul>
+        </div>
+        <!-- /from ESI page -->
+        <div class="content">
+            <h1>My Title Article</h1>
+            <div>....</div>
+        </div>
+    </body>
+    </html>
+
+By this you don't have to install and configure varnish on development mode, instead you still able to see the result of whole page should displayed.
